@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script
+    src="http://code.jquery.com/jquery-3.3.1.js"
+    integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
+    <title>Trivia</title>
+    <style>
+      p{
+        display:none;
+        /* display: */
+        /* color: cornflowerblue; */
+      }
+      .question-tile{
+        display:inline-block;
+        height:300px;
+        width:300px;
+        background-color:cornflowerblue;
+        vertical-align: top;
+        border-radius: 15px;
+        margin:10px;
+      }
+    </style>
+    <script>
+      $.get("https://opentdb.com/api.php?amount=10&category=14&difficulty=medium", playTrivia)
+      function playTrivia(data) {
+        console.log(data.results);
+        // 1. request the information from the API
+        // 2. after the information is received, create divs with HIDDEN information about each question
+        // 3. after creating the divs, we want to attach click handlers to each div that change the contents to show after clicking them
+        for (let i = 0; i<data.results.length; i++){
+          var triviaObject = data.results[i];
+          $('#container').append(`
+          <div class='question-tile' id=${i+1}>
+            <p class='question-${i+1}'>${triviaObject.category}</p>
+            <p class='question-${i+1}'>${triviaObject.question}</p>
+            <p class='question-${i + 1}'>${triviaObject.correct_answer}<input type='radio' name='answer-${i+1}' value='${triviaObject.correct_answer}'></p>
+            <p class='question-${i + 1}'>${triviaObject.incorrect_answers[0]}<input type='radio' name='answer-${i + 1}' value='${triviaObject.incorrect_answers[0]}'></p>
+            <p class='question-${i + 1}'>${triviaObject.incorrect_answers[1]}<input type='radio' name='answer-${i + 1}' value='${triviaObject.incorrect_answers[1]}'></p>
+            <p class='question-${i + 1}'>${triviaObject.incorrect_answers[2]}<input type='radio' name='answer-${i + 1}' value='${triviaObject.incorrect_answers[2]}'></p>
+            </div
+          </div>
+          `)
+        }
+      }
+      $(document).on('click', '.question-tile',(event)=>{
+        console.log('clicked a box');
+        // console.log('does this work?', $(this).children())
+        console.log(event);
+        let id = event.target.attributes.id.value;
+        console.log(id);
+        let className = '.question-'+id;
+        console.log($(className));
+        $(className).css('display', 'inherit');
+        // .css('display', 'initial');
+      })
+    </script>
+</head>
+<body>
+  <div id="container"></div>
+</body>
+</html>
